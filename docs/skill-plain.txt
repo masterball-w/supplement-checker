@@ -44,6 +44,12 @@ Follow `references/regulators-by-region.md`. Pick the regime that matches where 
   - Domestic products need 国食健注G / 国食健字G / 食健备G plus an SC licence (category 27 保健食品).
   - The claimed 保健功能 must be within the registered/filed scope.
   - Red flag: 普通食品 / 压片糖果 / 固体饮料 marketed with health or disease claims.
+- **Claimed origin ("进口 / 澳洲 / 美国 / 日本产"):** check that the product exists in its claimed home market, not just in China.
+  - Look it up in that country's official database: ARTG for Australia, LNHPD for Canada, 消費者庁 for Japan, DSLD as a reference for the US.
+  - Look for the brand's own official site and local retail listings in that country.
+  - Optionally search the trademark (WIPO Global Brand Database, IP Australia, EUIPO).
+  - Treat "TGA认证" / "FDA认证" wording as a flag: TGA lists or registers products and FDA does not approve supplements.
+  - If the product only shows up on Chinese channels, report that as a risk signal with the searches you ran. Do not call it fake.
 - **Third-party certifications:** verify in the certifier's own database (USP, NSF, Informed Sport/Choice, BSCG). A logo on the box is not proof.
 - Run the red-flags checklist in `references/regulators-by-region.md`.
 

@@ -71,6 +71,22 @@ Key facts:
 - 保健功能是否在核准范围内: the claimed function must appear on that product's registration/filing record. Compare it with 《允许保健食品声称的保健功能目录 非营养素补充剂（2023年版）》 (24 functions, published 2023-08-31) https://www.samr.gov.cn/zw/zfxxgk/fdzdgknr/tssps/art/2023/art_491d5c9de75e425c8cd0203027af1d93.html ✅ Nutrient supplements (维生素/矿物质) filed as 补充 X can only claim 补充 X.
 - 普通食品 / 压片糖果 / 固体饮料 / 代用茶 sold with words like 降血糖、降血压、抗癌、增强免疫 is a **red flag** (illegal health claim).
 
+## Claimed-origin check (假洋牌 risk)
+Chinese consumer reporting in 2026 described a pattern: a shell company and trademark registered abroad, domestic contract manufacturing, and sales through bonded warehouses and cross-border stores. Sources: 中国经济周刊 2026-04-15 http://paper.people.com.cn/zgjjzk/pc/content/202604/15/content_30154019.html ✅ and 中国网 2026-04-07 http://business.china.com.cn/2026-04/07/content_43392624.shtml ✅.
+
+What the agent checks:
+1. **Home-market registry.** Is the product in the official database of the country it claims to come from (ARTG / LNHPD / 消費者庁)? DSLD for the US is a voluntary-coverage reference, not a registry, so absence there is weak evidence.
+2. **Home-market presence.** Does the brand have an official site and local retail listings in that country (e.g. Amazon for the US, Chemist Warehouse for AU), or does it appear only on Chinese platforms?
+3. **Trademark (optional).** Look the trademark up in:
+   - WIPO Global Brand Database https://branddb.wipo.int/ ✅
+   - IP Australia https://search.ipaustralia.gov.au/trademarks/search/quick ✅
+   - EUIPO eSearch https://euipo.europa.eu/eSearch/ ✅
+
+   A very recent registration date, or an applicant that looks like a Chinese entity, is a signal only. It is not proof.
+4. **Wording.** "TGA认证" and "FDA认证" are not how those systems work. TGA lists (AUST L) or registers (AUST R) products, and FDA does not approve supplements.
+
+Report the findings as risk signals plus the searches you ran. Never call a named brand fake unless a regulator or court has said so, and then cite that decision.
+
 ## Third-party certifications (verify in the certifier's own database)
 | Program | Database | Status |
 |---|---|---|
