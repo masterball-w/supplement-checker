@@ -1,0 +1,70 @@
+Name: supplement-checker
+
+Description: Check a dietary supplement / 保健品 from a product photo or promo image. Identifies the product, then produces a sourced report on (1) ingredient efficacy evidence graded from animal studies to RCTs and meta-analyses, (2) brand compliance and registration status by region (FDA/DSLD, TGA, Health Canada, 消费者庁, EU/UK, 中国 SAMR 蓝帽子 / 跨境) plus third-party certifications, and (3) price comparison across channels normalized per effective dose. Use when the user uploads a supplement image or asks "这个保健品有没有用 / 正不正规 / 贵不贵". Research aid only, not medical or legal advice.
+
+----- SKILL BODY -----
+# Supplement Checker
+
+Turn a supplement photo into a research report with verifiable sources. The report helps a person make a better-informed decision. It does not diagnose, prescribe or certify anything.
+
+## Hard rules
+
+1. **Never fabricate.** Every study, registration number, certification and price in the report must come from a page or API you actually fetched in this session. Give a PMID, DOI or URL for each one. If you remember a PMID, look it up anyway (memory is often wrong).
+2. **Say what you could not check.** If a database is unreachable, login-walled or needs a captcha, write "未能核验 / not verified" and give the user the query URL. Do not guess the result.
+3. **Do not invent prices.** Record the date and time (with timezone) of every price. If live prices can't be fetched, give search links instead of numbers.
+4. **No medical advice.** End with the disclaimer in `references/report-template.md`. Point out special groups (pregnancy, children, chronic disease, medication interactions) and tell them to consult a doctor or pharmacist.
+5. **Separate fact from inference.** Use wording like "label states…", "database shows…" or "we found no record in…". "No record found" is not proof that something is illegal; say how you searched.
+
+## Workflow
+
+### Step 0: Identify the product
+- Read the image. Extract brand, product name, region/language of the label, dosage form, serving size, servings per container, and every active ingredient with its amount and unit. Also note registration marks (蓝帽子 + 批准文号, AUST L/R, NPN, 機能性表示食品 届出番号, USP/NSF seals), the barcode/UPC, claims and warnings.
+- If text is unreadable or the image is only a promo poster, search the visible text (brand + product name + dose) to find the official label. If it is still ambiguous, **ask the user** for a clearer photo of the Supplement Facts / 营养成分表 / 标签背面 rather than guessing.
+- Convert units: vitamin D 1 µg = 40 IU; vitamin E, vitamin A and others have form-specific conversions. Note the conversion you used.
+
+### Step 1: Ingredient efficacy evidence
+Follow `references/evidence-grading.md`.
+- For each key ingredient, define the claimed or implied benefit (from the label or ad copy) and search for evidence on that benefit.
+- Search order: (1) systematic reviews / meta-analyses (Cochrane, PubMed with "meta-analysis"[pt]), (2) large RCTs, (3) authoritative summaries (NIH ODS fact sheets, EFSA opinions, Examine.com), (4) animal and mechanistic studies, (5) CNKI/万方 for Chinese-specific ingredients such as TCM extracts.
+- Verify each PMID with PubMed E-utilities `esummary` and each DOI with Crossref. Read the abstract before summarizing it.
+- Grade every claim: **Strong / Moderate / Limited / Animal-or-in-vitro only / Evidence against**.
+- **Dose match:** compare the product's daily dose with the doses used in the cited studies. Also compare it with the reference intake (RDA/AI) and the upper limit (UL). Flag doses above the UL.
+- State who the evidence applies to (e.g. deficient vs replete adults, elderly, athletes).
+
+### Step 2: Brand compliance and qualification
+Follow `references/regulators-by-region.md`. Pick the regime that matches where the product is made and where it is sold to the user.
+- **US:** FDA does **not** approve dietary supplements. Check the DSLD label record, NDI notifications for new ingredients, FDA warning letters, recalls and the inspection dashboard. Food facility registration status is **not public**, so say so. Structure/function claims are permitted with the FDA disclaimer. Disease claims are not permitted.
+- **Australia:** ARTG listing (AUST L / AUST R).
+- **Canada:** 8-digit NPN in LNHPD.
+- **Japan:** 機能性表示食品 届出 database / 特定保健用食品 list.
+- **EU / UK:** No pre-market approval for food supplements. Health claims must be on the EU register or the GB NHC register.
+- **China:**
+  - 跨境电商零售进口 (天猫国际、京东国际 etc.) products may be sold without 蓝帽子 registration; check the listing says 跨境/海外旗舰店.
+  - 一般贸易进口 保健食品 needs 国食健注J / 食健备J.
+  - Domestic products need 国食健注G / 国食健字G / 食健备G plus an SC licence (category 27 保健食品).
+  - The claimed 保健功能 must be within the registered/filed scope.
+  - Red flag: 普通食品 / 压片糖果 / 固体饮料 marketed with health or disease claims.
+- **Third-party certifications:** verify in the certifier's own database (USP, NSF, Informed Sport/Choice, BSCG). A logo on the box is not proof.
+- Run the red-flags checklist in `references/regulators-by-region.md`.
+
+### Step 3: Price comparison
+Follow `references/price-comparison.md`.
+- Same product across channels: official site, 京东 / 天猫 / 淘宝 / 拼多多 / 抖音商城, iHerb, Amazon, 跨境 stores. Prefer official flagship stores.
+- Same ingredient from other brands, normalized to **price per effective daily dose** (or per mg / per 1000 IU of active ingredient).
+- Record the date/time of each check. Flag authenticity risk for unusually cheap listings (个人代购, no flagship store, no 跨境 label, price far below the official price).
+- If prices are behind login walls, give search links and say so.
+
+### Step 4: Write the report
+Use `references/report-template.md` exactly:
+- Summary verdict table
+- Sections 1–3
+- Sources list
+- Disclaimer
+
+Keep it in the user's language. Keep verdicts proportionate to the evidence. See `examples/` for a worked report.
+
+## Tools that help
+- PubMed: `https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=...&retmode=json`, then `esummary.fcgi?db=pubmed&id=...&retmode=json`, then `efetch.fcgi?db=pubmed&id=...&rettype=abstract&retmode=text`
+- Crossref DOI check: `https://api.crossref.org/works/{doi}`
+- DSLD API: `https://api.ods.od.nih.gov/dsld/v9/search-filter?q=...` and `https://api.ods.od.nih.gov/dsld/v9/label/{id}`; public page `https://dsld.od.nih.gov/label/{id}`
+- Some government sites block plain HTTP clients. Retry with a browser user-agent or a browser before marking them unverified.

@@ -1,0 +1,13 @@
+flowchart TD
+    A["📷 用户上传保健品图片<br/>Photo / promo image"] --> B["Step 0 识别产品<br/>品牌·成分·剂量·文号·认证标志"]
+    B -->|看不清| B2["追问用户 / 搜索标签文字"]
+    B2 --> B
+    B --> C["Step 1 功效证据<br/>PubMed · Cochrane · ODS · EFSA · CNKI"]
+    B --> D["Step 2 合规资质<br/>FDA/DSLD · TGA · NPN · 消費者庁 · SAMR 蓝帽子 · USP/NSF"]
+    B --> E["Step 3 价格对比<br/>官网 · 京东 · 天猫 · 拼多多 · iHerb"]
+    C --> C1["核验 PMID / DOI<br/>证据分级 + 剂量对比"]
+    D --> D1["官方数据库逐项查询<br/>红旗清单"]
+    E --> E1["按有效日剂量折算<br/>记录核查时间"]
+    C1 --> F["📄 报告<br/>结论速览 · 三部分 · 来源 · 免责声明"]
+    D1 --> F
+    E1 --> F
