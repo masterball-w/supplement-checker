@@ -75,6 +75,8 @@ flowchart TD
 
 [`examples/nature-made-vitamin-d3-1000iu.md`](examples/nature-made-vitamin-d3-1000iu.md)：Nature Made 维生素 D3 1000 IU 软胶囊，核查于 2026-10-10（UTC+8）。
 
+[`examples/ormior-nervonic-acid.md`](examples/ormior-nervonic-acid.md)：ORMIOR「澳大利亚神经酸」（磷脂酰丝氨酸 + 神经酸），核查于 2026-10-12（UTC+8），产地判定为【假洋牌】，证据截图见 [`examples/evidence/ormior/`](examples/evidence/ormior/)。该判定针对品牌产地身份，不涉及成分真伪。
+
 <p align="center"><img src="docs/images/example-report.png" alt="example report screenshot" width="80%"></p>
 
 ## 目录结构
