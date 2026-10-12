@@ -12,6 +12,37 @@
 
 > ⚠️ **这是一个研究辅助工具，不是医疗建议，也不是法律意见。** 报告内容取决于检索时能访问到的数据库与网页，可能不完整或已过时。是否服用、服用多少，请咨询医生或药师。
 
+<!-- DEMO VIDEO / GIF PLACEHOLDER：演示视频（B站链接或 docs/images/demo.gif）制作完成后放在这里 -->
+
+## 快速开始
+
+### 1. 安装
+
+```bash
+git clone https://github.com/masterball-w/supplement-checker.git
+
+# Cursor（全局）：~/.cursor/skills/；也可放项目内 .cursor/skills/
+mkdir -p ~/.cursor/skills && cp -r supplement-checker ~/.cursor/skills/
+
+# Claude Code（全局）：~/.claude/skills/；也可放项目内 .claude/skills/
+mkdir -p ~/.claude/skills && cp -r supplement-checker ~/.claude/skills/
+```
+
+- 文件夹名保持 `supplement-checker`，与 `SKILL.md` 里的 `name` 一致。
+- 其他支持 Agent Skills（`SKILL.md`）的工具：把整个文件夹放进它的 skills 目录。Cursor 也会读取 `.agents/skills/` 和 `~/.claude/skills/`。
+- 不支持 Skills 的 agent：把 `docs/skill-plain.txt` 的内容作为系统提示词或项目说明粘贴进去，需要时再把 `references/` 里的文件一起提供给它。
+
+### 2. 使用
+
+agent 需要能读图，并且能联网检索、打开网页。上传一张保健品的商品图或宣传图，然后输入：
+
+```text
+帮我查一下这个保健品：成分有没有研究支持、品牌在当地有没有注册、同成分哪里买更划算。
+我在中国大陆，主要在京东和天猫买。
+```
+
+也可以输入 `/supplement-checker` 显式调用。图片看不清时，agent 会追问品牌、成分表或文号。报告格式见 [`references/report-template.md`](references/report-template.md)，完整示例见下方「示例报告」。
+
 ## 工作流程
 
 ```mermaid
@@ -69,16 +100,7 @@ supplement-checker/
 
 ## 安装
 
-本仓库遵循通用的 Agent Skills 结构（一个文件夹 + `SKILL.md`），可放入支持 Skills 的 agent 的 skills 目录，例如：
-
-- Claude Code：`~/.claude/skills/supplement-checker/` 或项目内 `.claude/skills/supplement-checker/`
-- Cursor 等其他支持 `SKILL.md` 的工具：放入对应的 skills 目录
-
-```bash
-git clone https://github.com/masterball-w/supplement-checker.git
-```
-
-使用时上传保健品图片，并说"帮我查一下这个保健品"即可。agent 需要具备读图和联网检索 / 网页访问能力。
+见上方 [快速开始](#快速开始)。
 
 ## 已知局限
 
@@ -90,6 +112,10 @@ git clone https://github.com/masterball-w/supplement-checker.git
 ## 免责声明
 
 本项目及其生成的报告仅供信息参考，不构成医疗、营养或法律建议。保健品不能替代药物治疗。孕期或哺乳期、儿童、慢性病患者、正在服药或计划手术者，使用任何补充剂前请咨询医生或药师。
+
+## 我的其他项目
+
+- [A-writer-should-do](https://github.com/masterball-w/A-writer-should-do)：从一本书里蒸馏作者的写法，生成可直接调用的写作 Skill，仓库内附 7 个已蒸馏的作家实例
 
 ---
 
@@ -108,4 +134,4 @@ git clone https://github.com/masterball-w/supplement-checker.git
 
 **This is a research aid, not medical or legal advice.** Results depend on what the agent could access at the time of the check.
 
-Install by copying this folder into your agent's skills directory (e.g. `~/.claude/skills/supplement-checker/`). Licensed under MIT © 2026 masterball-w.
+Install by copying this folder into your agent's skills directory (e.g. `~/.cursor/skills/supplement-checker/` or `~/.claude/skills/supplement-checker/`), then upload a supplement photo and ask the agent to check it. Licensed under MIT © 2026 masterball-w.
