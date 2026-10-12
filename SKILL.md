@@ -10,10 +10,11 @@ Turn a supplement photo into a research report with verifiable sources. The repo
 ## Hard rules
 
 1. **Never fabricate.** Every study, registration number, certification and price in the report must come from a page or API you actually fetched in this session. Give a PMID, DOI or URL for each one. If you remember a PMID, look it up anyway (memory is often wrong).
-2. **Say what you could not check.** If a database is unreachable, login-walled or needs a captcha, write "未能核验 / not verified" and give the user the query URL. Do not guess the result.
+2. **Try hard before saying "not verified", then say what you tried.** If a source fails, retry in this order: a browser user-agent with curl; an alternate endpoint or mirror (API, mobile site, search-index cache); archive.org snapshots (`https://web.archive.org/web/2026*/<url>`); the browser tool if one is available. Only then write "未能直接核验" in the report, together with the methods tried and the fallback evidence used (with its date and source type). Never tell the reader to "check it later yourself". Do not guess the result.
 3. **Do not invent prices.** Record the date and time (with timezone) of every price. If live prices can't be fetched, give search links instead of numbers.
 4. **No medical advice.** End with the disclaimer in `references/report-template.md`. Point out special groups (pregnancy, children, chronic disease, medication interactions) and tell them to consult a doctor or pharmacist.
 5. **Separate fact from inference.** Use wording like "label states…", "database shows…" or "we found no record in…". "No record found" is not proof that something is illegal; say how you searched.
+6. **State origin verdicts plainly.** When a product claims a foreign origin, run the 假洋牌 rubric in `references/regulators-by-region.md` and give one of its verdict levels, with the evidence table. Every signal in the table needs a source URL and a source-type tag (一手 / 二手). Never put a verdict level above what the evidence table supports.
 
 ## Workflow
 
@@ -53,6 +54,9 @@ Follow `references/regulators-by-region.md`. Pick the regime that matches where 
 - **Third-party certifications:** verify in the certifier's own database (USP, NSF, Informed Sport/Choice, BSCG). A logo on the box is not proof.
 - Run the red-flags checklist in `references/regulators-by-region.md`.
 
+### Step 2b: Claimed-origin verdict (假洋牌判定)
+For any product sold in China as imported, or labelled with a foreign origin, apply the rubric in `references/regulators-by-region.md` → "假洋牌判定 rubric". Cover the corporate chain: who registered the trademark, in which country and when; who the label manufacturer and the Chinese operator (境内运营方 / 店铺主体) are, and where they are; what the manufacturer's own website says it does; and the origin fields on Chinese listings (产地, 发货地, 保税仓).
+
 ### Step 3: Price comparison
 Follow `references/price-comparison.md`.
 - Same product across channels: official site, 京东 / 天猫 / 淘宝 / 拼多多 / 抖音商城, iHerb, Amazon, 跨境 stores. Prefer official flagship stores.
@@ -73,4 +77,6 @@ Keep it in the user's language. Keep verdicts proportionate to the evidence. See
 - PubMed: `https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=...&retmode=json`, then `esummary.fcgi?db=pubmed&id=...&retmode=json`, then `efetch.fcgi?db=pubmed&id=...&rettype=abstract&retmode=text`
 - Crossref DOI check: `https://api.crossref.org/works/{doi}`
 - DSLD API: `https://api.ods.od.nih.gov/dsld/v9/search-filter?q=...` and `https://api.ods.od.nih.gov/dsld/v9/label/{id}`; public page `https://dsld.od.nih.gov/label/{id}`
+- ARTG: if the tga.gov.au search page returns nothing even for a control query, use the ARTG Search Visualisation Tool (https://compliance.health.gov.au/artg/) and the entry's Public Summary PDF (see references/regulators-by-region.md).
+- Retail absence: always pair the brand search with a control-product search on the same site.
 - Some government sites block plain HTTP clients. Retry with a browser user-agent or a browser before marking them unverified.

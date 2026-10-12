@@ -28,8 +28,13 @@ Key facts:
 
 ## Australia
 - Complementary medicines must be on the ARTG as **AUST L** (listed, low risk, self-assessed permitted indications) or **AUST R** (registered, evaluated).
-- Search: ARTG https://www.tga.gov.au/resources/artg ✅ (needs a browser user-agent; plain curl may time out) and the eBS search https://www.ebs.tga.gov.au/ ✅
+- Search: ARTG https://www.tga.gov.au/resources/artg (needs a browser user-agent; plain curl may time out; check it with a control query, see below) and the eBS search https://www.ebs.tga.gov.au/ ✅
 - An AUST L number means it's listed, not that efficacy was evaluated by TGA.
+- **Run a control query first.** In October 2026 the tga.gov.au ARTG search page returned "There were no matching results" for every keyword, even the control `paracetamol`. If a known product returns nothing, the page is broken and its "no results" is not evidence.
+- **Working route (primary source):** the TGA-linked ARTG Search Visualisation Tool https://compliance.health.gov.au/artg/ (Power BI; shows the total ARTG count, about 97k entries). It needs a browser. Search by brand, by sponsor name and by ingredient, and record the result counts.
+- **Public Summary PDF for one entry:** `https://www.ebs.tga.gov.au/servlet/xmlmillr6?dbid=ebs/PublicHTML/pdfStore.nsf&docid=<ARTG_ID>&agid=(PrintDetailsPublic)&actionid=1`. It shows the "ARTG entry for" line (e.g. "Medicine Listed (Export Only)"), Approval Area, start date, sponsor and address, and conditions such as "must not be supplied for sale in Australia". Save the PDF as evidence.
+- **Export Only** entries (Approval Area "Export only Medicines", often category LIE) cannot be sold in Australia. An export-only listing is not a sale-permitted registration for the 假洋牌 rubric (S1).
+- Fallbacks, in order: the browser tool on the two pages above; the Wayback snapshot of `https://www.tga.gov.au/resources/artg/<ID>`; search-index snippets (二手).
 
 ## Canada
 - Natural health products need an 8-digit **NPN** (or DIN-HM).
@@ -85,7 +90,42 @@ What the agent checks:
    A very recent registration date, or an applicant that looks like a Chinese entity, is a signal only. It is not proof.
 4. **Wording.** "TGA认证" and "FDA认证" are not how those systems work. TGA lists (AUST L) or registers (AUST R) products, and FDA does not approve supplements.
 
-Report the findings as risk signals plus the searches you ran. Never call a named brand fake unless a regulator or court has said so, and then cite that decision.
+### Retail absence check with controls (for S2)
+To claim a brand is absent from origin-country retail:
+1. Search the brand on that country's Amazon and on its two or three biggest pharmacy or health retailers (AU: Amazon.com.au, Chemist Warehouse, Priceline; US: Amazon.com, Walmart, iHerb US, CVS; CA: Amazon.ca, Shoppers Drug Mart; JP: Amazon.co.jp, Rakuten).
+2. On the same site and in the same session, search a well-known control product (e.g. "Blackmores Fish Oil" in AU) and record its result count. A nonzero control shows the search works; without it, a "0 results" is weak evidence.
+3. Use the site's own search box when URL parameters don't trigger a search (Chemist Warehouse and Priceline ignore `?q=`). Record the final URL, the time with timezone, and a screenshot.
+4. Note side effects of geo-location (e.g. Amazon showing "Deliver to United States") and remove any personal data from screenshots before publishing.
+
+### 假洋牌判定 rubric
+
+A 假洋牌 here means a product sold as foreign-made or as a foreign brand whose brand ownership, manufacturing and sales are in fact mainly based in mainland China or Hong Kong, with the foreign identity serving mainly as a marketing label. Score each signal below. Each one needs a source URL and a tag: **一手** (the regulator's or registry's own page, or the company's own website or label) or **二手** (search snippet, mirror site, directory, news report, consumer post).
+
+| # | Signal | Weight |
+|---|---|---|
+| S1 | The claimed origin has no sale-permitted registration for this product (no AUST L/R, NPN, 届出番号 and so on), or the only entry is export-only (e.g. ARTG "Export Only") | Strong |
+| S2 | Absent from mainstream retail in the claimed origin country, including that country's Amazon and main pharmacy chains | Strong |
+| S3 | No functioning brand website in the origin country (domain dead, parked, or China-only content) | Medium |
+| S4 | The label manufacturer, brand owner, store operator or importer is located in mainland China or HK, or describes itself as an OEM/ODM serving Chinese cross-border sellers | Strong |
+| S5 | The trademark was first filed in China/HK, or by an applicant based in China/HK, or the foreign mark changed hands among holding companies shortly before cross-border sales | Medium |
+| S6 | Label or listing claims that would not be legal in the origin country (e.g. "TGA认证", "FDA认证", disease claims on a listed medicine) | Medium |
+| S7 | Sold mainly through cross-border channels into China (海外旗舰店, 保税仓 / 香港仓发货), with origin fields that contradict each other between listings | Medium |
+
+Verdict scale:
+
+| Verdict | When to use |
+|---|---|
+| 【假洋牌】 | At least three strong signals, at least two of them verified from 一手 sources, plus no 一手 evidence pointing the other way (e.g. a sale-permitted registration plus real retail presence in the origin country) |
+| 【高度疑似假洋牌】 | At least two strong signals, but some of them rest only on 二手 sources, or a live check could not be completed and archived copies were used |
+| 【存在假洋牌风险信号】 | One strong signal, or only medium signals |
+| 【未发现假洋牌特征】 | Sale-permitted registration in the origin country, real origin-country retail and website, and no China/HK control signal found |
+
+How to write it:
+- Put the verdict in the 结论速览 table and open section 2 with it, stated plainly ("综合以下证据，判定为【高度疑似假洋牌】").
+- Follow it with the evidence table: 信号 | 事实 | 来源 URL | 一手/二手 | 检索时间.
+- Say what would move the verdict up or down (for example "若 TGA 实时查询确认无可售登记，则升级为【假洋牌】").
+- The verdict describes origin and brand identity. It is not a finding of counterfeiting or of unsafe contents, so do not say the product is 假货 or harmful unless a regulator or court has said so, and cite that decision.
+- For a public video or post that names the brand, show the evidence rows next to the verdict label on screen.
 
 ## Third-party certifications (verify in the certifier's own database)
 | Program | Database | Status |
